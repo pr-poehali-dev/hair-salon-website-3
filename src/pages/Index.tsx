@@ -115,21 +115,48 @@ const Index = () => {
 
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Заявка отправлена!",
-      description: "Мы свяжемся с вами в ближайшее время для подтверждения записи.",
-    });
-    setFormData({
-      name: '',
-      phone: '',
-      service: '',
-      master: '',
-      date: '',
-      time: '',
-      message: ''
-    });
+    
+    try {
+      const response = await fetch('https://functions.poehali.dev/4882c339-3d0e-4392-98ae-63f4d3f4c54c', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast({
+          title: "Заявка отправлена!",
+          description: "Мы свяжемся с вами в ближайшее время для подтверждения записи.",
+        });
+        setFormData({
+          name: '',
+          phone: '',
+          service: '',
+          master: '',
+          date: '',
+          time: '',
+          message: ''
+        });
+      } else {
+        toast({
+          title: "Ошибка",
+          description: data.error || "Не удалось отправить заявку. Попробуйте позже.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Ошибка",
+        description: "Не удалось отправить заявку. Проверьте подключение к интернету.",
+        variant: "destructive",
+      });
+    }
   };
 
   const scrollToSection = (id: string) => {

@@ -1,0 +1,37 @@
+{
+  "tests": [
+    {
+      "name": "Create new booking",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "name": "Иван Петров",
+        "phone": "+79991234567",
+        "service": "Мужская стрижка",
+        "master": "Анна Смирнова",
+        "date": "2024-12-15",
+        "time": "14:00",
+        "message": "Первый раз в салоне"
+      },
+      "expectedStatus": 201,
+      "expectedBody": {
+        "message": "string",
+        "booking": {
+          "name": "string",
+          "status": "string"
+        }
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Get all bookings",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "bookings": "array"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
